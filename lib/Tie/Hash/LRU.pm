@@ -6,7 +6,7 @@ use warnings;
 use Tie::Hash;
 
 our @ISA     = qw(Tie::Hash);
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 require XSLoader;
 XSLoader::load('Tie::Hash::LRU', $VERSION);
@@ -60,9 +60,16 @@ Tie::Hash::LRU - LRU hashes for Perl (XS implementation)
 
     # Accessing LRU hash without tied overhead (significantly faster)
 
+    my $tied = Tie::Hash::LRU->TIEHASH(100); 
+
     $tied->STORE('foo', 'bar');
     $foo = $tied->FETCH('foo');
 
+    if ($tied->EXISTS('foo')) {
+        ...
+    }
+
+    $tied->DELETE('foo');
 
     # And the fastest way would be to also avoid looking into @ISA 
     # as with previous example: 
