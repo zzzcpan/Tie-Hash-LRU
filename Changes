@@ -1,6 +1,6 @@
 Revision history for Perl extension Tie::Hash::LRU
 
-0.04  
+0.04  Fri Aug  5 00:20:49 EEST 2011
 	- again more documentation;
 	- benchmark;
 
