@@ -117,7 +117,7 @@ Store entry into LRU hash directly.
 
 Fetch entry from LRU hash directly. 
 
-=item $tied->DELETE('foo', 'bar')
+=item $lru->DELETE('foo', 'bar')
 
 Delete key from LRU hash directly. 
 

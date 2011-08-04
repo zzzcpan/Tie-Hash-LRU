@@ -87,7 +87,7 @@ METHODS
     $foo = $lru->FETCH('foo')
             Fetch entry from LRU hash directly.
 
-    $tied->DELETE('foo', 'bar')
+    $lru->DELETE('foo', 'bar')
             Delete key from LRU hash directly.
 
 BENCHMARK
