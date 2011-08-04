@@ -90,6 +90,29 @@ METHODS
     $tied->DELETE('foo', 'bar')
             Delete key from LRU hash directly.
 
+BENCHMARK
+        cache_hit:
+                                   Rate (higher is better)
+        Cache::FastMmap          94.5/s
+        Cache::FastMmap (raw)     107/s
+        Tie::Cache::LRU (tied)    839/s
+        Cache::LRU               1152/s
+        Tie::Cache::LRU (direct) 1184/s
+        Tie::Hash::LRU (tied)    2352/s
+        Tie::Hash::LRU (direct)  7808/s
+
+        cache_set:
+                                 s/iter (lower is better)
+        Tie::Cache::LRU (tied)     1.78
+        Tie::Cache::LRU (direct)   1.57
+        Cache::LRU                 1.06
+        Tie::Hash::LRU (tied)     0.409
+        Tie::Hash::LRU (direct)   0.241
+
+    Tied here means using tied hash to get and set values. And direct--
+    using the tie API ("$lru->FETCH($key)", etc.), i.e. eliminating tied
+    overhead.
+
 AUTHOR
     Alexandr Gomoliako <zzz@zzz.org.ua>
 
