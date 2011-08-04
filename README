@@ -4,7 +4,7 @@ NAME
 SYNOPSIS
         use Tie::Hash::LRU;
 
-        $tied = tie %h, 'Tie::Hash::LRU', 100; # will hold only 100 entries
+        $lru = tie %h, 'Tie::Hash::LRU', 100; # will hold only 100 entries
 
         $h{'bar'} = 'foo';
         $h{'foo'} = 'bar'; 
@@ -37,24 +37,25 @@ SYNOPSIS
 
         (tied %h)->autohit(1); # enables LRU back on
 
-        # Accessing LRU hash without tied overhead (significantly faster)
+        # Accessing LRU hash without tied overhead (significantly faster).
+        # We are using perl's tie API to do this.
 
-        my $tied = Tie::Hash::LRU->TIEHASH(100); 
+        $lru = Tie::Hash::LRU->TIEHASH(100); 
 
-        $tied->STORE('foo', 'bar');
-        $foo = $tied->FETCH('foo');
+        $lru->STORE('foo', 'bar');
+        $foo = $lru->FETCH('foo');
 
-        if ($tied->EXISTS('foo')) {
+        if ($lru->EXISTS('foo')) {
             ...
         }
 
-        $tied->DELETE('foo');
+        $lru->DELETE('foo');
 
         # And the fastest way would be to also avoid looking into @ISA 
         # as with previous example: 
 
-        Tie::Hash::LRU::STORE($tied, 'foo', 'bar');
-        $foo = Tie::Hash::LRU::FETCH($tied, 'foo');
+        Tie::Hash::LRU::STORE($lru, 'foo', 'bar');
+        $foo = Tie::Hash::LRU::FETCH($lru, 'foo');
 
 DESCRIPTION
     This module provides XS implementation of the LRU algorithm. It merely
@@ -65,20 +66,29 @@ DESCRIPTION
     But the benefits of linked lists are still there, i.e. writes are almost
     as fast as reads, which is not the case for pure-perl implementations.
 
-    Additionally, you can use this module without any tied overhead.
+    You can use this module without any tied overhead by using perl's tie
+    API.
 
 METHODS
-    $tied = tie %h, 'Tie::Hash::LRU', 100;
+    $lru = tie %h, 'Tie::Hash::LRU', 100;
             Create tied LRU hash that will hold 100 entries.
 
-    $tied->autohit(1), (tied %h)->autohit(1)
-            Enables/disables LRU for tied hash. LRU is enabled by default.
+    $lru->autohit(1), (tied %h)->autohit(1)
+            Enables/disables LRU hits for tied hash. LRU hits are enabled by
+            default.
 
-    $tied->STORE('foo', 'bar')
-            Store key into tied object directly.
+    $lru = Tie::Hash::LRU->TIEHASH(100);
+            Creating raw untied LRU hash. This is actually the same object
+            as returned by "tie %h ...".
 
-    $foo = $tied->FETCH('foo')
-            Fetch entry from tied object directly.
+    $lru->STORE('foo', 'bar')
+            Store entry into LRU hash directly.
+
+    $foo = $lru->FETCH('foo')
+            Fetch entry from LRU hash directly.
+
+    $tied->DELETE('foo', 'bar')
+            Delete key from LRU hash directly.
 
 AUTHOR
     Alexandr Gomoliako <zzz@zzz.org.ua>
