@@ -6,7 +6,7 @@ use warnings;
 use Tie::Hash;
 
 our @ISA     = qw(Tie::Hash);
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 require XSLoader;
 XSLoader::load('Tie::Hash::LRU', $VERSION);
